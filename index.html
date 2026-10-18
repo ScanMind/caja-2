@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d7a6b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mi Caja">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Mi Caja</title>
+<style>
+:root{--bg:#f4f6f5;--card:#fff;--tx:#17211f;--tx2:#5b6b67;--bd:#dbe3e0;--acc:#0d7a6b;--onacc:#fff;--acc-bg:#dff3ef;--red:#b42318;--red-bg:#fdeceb;--grn:#157347;--grn-bg:#e3f5ea;--amb:#8a5600;--amb-bg:#fdf1d8;--c1:#2563eb;--c2:#16803c;--c3:#c2570c;--c4:#7c3aed;color-scheme:light;box-sizing:border-box}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101615;--card:#1a2321;--tx:#eaf1ef;--tx2:#9fb2ad;--bd:#2c3a37;--acc:#3fc2ad;--onacc:#06211c;--acc-bg:#12332d;--red:#f4a6a0;--red-bg:#3b1815;--grn:#8fd9a8;--grn-bg:#12321f;--amb:#f0c36a;--amb-bg:#3a2a0a;--c1:#7aa2ff;--c2:#6fd48f;--c3:#ff9f5a;--c4:#b69cff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101615;--card:#1a2321;--tx:#eaf1ef;--tx2:#9fb2ad;--bd:#2c3a37;--acc:#3fc2ad;--onacc:#06211c;--acc-bg:#12332d;--red:#f4a6a0;--red-bg:#3b1815;--grn:#8fd9a8;--grn-bg:#12321f;--amb:#f0c36a;--amb-bg:#3a2a0a;--c1:#7aa2ff;--c2:#6fd48f;--c3:#ff9f5a;--c4:#b69cff;color-scheme:dark}
+:root[data-ac="azul"]{--acc:#1d4ed8;--acc-bg:#e0e9ff;--onacc:#fff}
+:root[data-ac="morado"]{--acc:#6d28d9;--acc-bg:#eee5ff;--onacc:#fff}
+:root[data-ac="naranja"]{--acc:#b45309;--acc-bg:#ffe9d6;--onacc:#fff}
+@media (prefers-color-scheme:dark){:root[data-ac="azul"]:not([data-theme="light"]){--acc:#8ab0ff;--acc-bg:#14295a;--onacc:#06142f}:root[data-ac="morado"]:not([data-theme="light"]){--acc:#c1a6ff;--acc-bg:#2a1a55;--onacc:#1a0b3a}:root[data-ac="naranja"]:not([data-theme="light"]){--acc:#ffa863;--acc-bg:#4a2408;--onacc:#2a1204}}
+:root[data-theme="dark"][data-ac="azul"]{--acc:#8ab0ff;--acc-bg:#14295a;--onacc:#06142f}
+:root[data-theme="dark"][data-ac="morado"]{--acc:#c1a6ff;--acc-bg:#2a1a55;--onacc:#1a0b3a}
+:root[data-theme="dark"][data-ac="naranja"]{--acc:#ffa863;--acc-bg:#4a2408;--onacc:#2a1204}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:1rem;line-height:1.45}
+main{max-width:32.5rem;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 0.875rem) 0.875rem 6.875rem}
+h1{font-size:1.375rem;margin:0 0 2px}
+h2{font-size:1.0625rem;margin:0 0 0.5rem}
+.sub{color:var(--tx2);font-size:0.875rem;margin:0 0 0.875rem}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:0.875rem;padding:0.875rem;margin-bottom:0.75rem}
+.nav{display:flex;gap:0.5rem;margin-bottom:0.75rem}
+.nav button,.nav input{height:2.875rem;border:1px solid var(--bd);border-radius:0.75rem;background:var(--card);color:var(--tx);font:inherit}
+.nav button{padding:0 1rem;font-size:1.125rem;cursor:pointer}
+.nav input,.nav .lb{flex:1;min-width:0}
+.nav .lb{display:flex;align-items:center;justify-content:center;font-weight:700;text-align:center;font-size:0.875rem}
+.nav input{padding:0 0.625rem}
+.in{display:block;background:var(--card);border:1px solid var(--bd);border-left:0.375rem solid var(--c);border-radius:0.875rem;padding:0.75rem 0.875rem;margin-bottom:0.625rem}
+.in .lb{display:block;font-weight:700;font-size:1.0625rem;color:var(--c)}
+.in .sb{display:block;font-size:0.8438rem;color:var(--tx2);margin-bottom:0.375rem}
+.box{display:flex;align-items:center;gap:0.5rem}
+.box i{font-style:normal;color:var(--tx2);font-weight:600}
+.box input{flex:1;min-width:0;height:3.125rem;border:1px solid var(--bd);border-radius:0.625rem;background:var(--bg);color:var(--tx);font:inherit;font-size:1.5rem;font-weight:600;padding:0 0.75rem}
+input:focus-visible,button:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:1px}
+.row{display:flex;justify-content:space-between;gap:0.625rem;padding:0.5rem 0;border-bottom:1px solid var(--bd)}
+.row:last-child{border-bottom:0}
+.row b{white-space:nowrap}
+.pos{color:var(--grn)}.neg{color:var(--red)}
+.al{border-radius:0.625rem;padding:0.6875rem 0.8125rem;margin-bottom:0.625rem;font-size:0.9375rem;font-weight:600}
+.al.big{font-size:1.125rem;border-left:0.375rem solid currentColor}
+.al.r{background:var(--red-bg);color:var(--red)}.al.a{background:var(--amb-bg);color:var(--amb)}.al.g{background:var(--grn-bg);color:var(--grn)}.al.b{background:var(--acc-bg);color:var(--acc)}
+.vd{border-radius:0.875rem;padding:1rem;margin-bottom:0.75rem;font-size:1.1875rem;font-weight:800;line-height:1.25}
+.vd.r{background:var(--red-bg);color:var(--red)}.vd.g{background:var(--grn-bg);color:var(--grn)}.vd.b{background:var(--acc-bg);color:var(--acc)}
+.bar{position:relative;height:1.375rem;border-radius:0.6875rem;background:var(--bd);overflow:hidden;margin:0.5rem 0}
+.bar>span{position:absolute;left:0;top:0;bottom:0;background:var(--acc);border-radius:0.6875rem}
+.bar>em{position:absolute;top:0;bottom:0;width:3px;background:var(--tx);opacity:.55}
+.pct{font-size:2.125rem;font-weight:800}
+.pay{display:flex;gap:0.75rem;align-items:center;padding:0.6875rem 0;border-bottom:1px solid var(--bd)}
+.pay:last-child{border-bottom:0}
+.pay input[type=checkbox]{width:1.75rem;height:1.75rem;flex:none;accent-color:var(--acc)}
+.pay .t{flex:1;min-width:0}
+.pay .t b{display:block}
+.pay .t small{font-size:0.8438rem;color:var(--tx2)}
+.pay .t small.r{color:var(--red);font-weight:700}.pay .t small.a{color:var(--amb);font-weight:700}
+.pay.done .t{opacity:.55;text-decoration:line-through}
+.pay .am{font-weight:700;white-space:nowrap}
+.btn{width:100%;height:3.125rem;border:0;border-radius:0.75rem;background:var(--acc);color:var(--onacc);font:inherit;font-weight:700;font-size:1rem;cursor:pointer;margin-top:0.625rem}
+.btn.o{background:transparent;color:var(--red);border:1px solid var(--red)}
+.btn.g{background:var(--grn);color:var(--card)}
+.btn.s{height:2.25rem;width:auto;padding:0 0.75rem;margin:0;font-size:0.8125rem;background:transparent;color:var(--tx2);border:1px solid var(--bd);font-weight:600}
+.bk{border:0;background:transparent;color:var(--acc);font:inherit;font-weight:700;font-size:1rem;padding:0.375rem 0;margin-bottom:0.375rem;cursor:pointer}
+.txt{width:100%;height:2.875rem;border:1px solid var(--bd);border-radius:0.625rem;background:var(--bg);color:var(--tx);font:inherit;padding:0 0.75rem;margin-top:0.5rem}
+textarea.txt{height:6rem;padding:0.625rem;font-size:0.8125rem}
+.lbl{display:block;font-size:0.8438rem;color:var(--tx2);margin-top:0.625rem}
+.mn{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--bd);border-radius:0.875rem;padding:0.875rem;margin-bottom:0.625rem;color:var(--tx);font:inherit;cursor:pointer}
+.mn b{display:block;font-size:1.0625rem}
+.mn span{font-size:0.875rem;color:var(--tx2)}
+.seg{display:flex;gap:0.375rem;margin-top:0.375rem}
+.seg button{flex:1;height:2.75rem;border:1px solid var(--bd);border-radius:0.625rem;background:var(--card);color:var(--tx);font:inherit;cursor:pointer}
+.seg button.on{background:var(--acc);color:var(--onacc);border-color:var(--acc);font-weight:700}
+.hr{display:flex;justify-content:space-between;gap:0.5rem;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--bd);padding:0.625rem 0;color:var(--tx);font:inherit;cursor:pointer}
+.hr small{display:block;color:var(--tx2);font-size:0.8125rem}
+.tip{padding:0.625rem 0;border-bottom:1px solid var(--bd)}
+.tip:last-child{border-bottom:0}
+.tip b{display:block}
+.tip span{color:var(--tx2);font-size:0.9375rem}
+.note{font-size:0.8125rem;color:var(--tx2);margin-top:0.625rem}
+.tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:32.5rem;display:flex;background:var(--card);border-top:1px solid var(--bd);padding:0 4px calc(0.375rem + env(safe-area-inset-bottom,0px))}
+.tabs button{flex:1;height:3.5rem;border:0;border-top:4px solid transparent;background:transparent;color:var(--tx2);font:inherit;font-size:0.875rem;cursor:pointer;padding:0 1px}
+.tabs button.on{color:var(--acc);font-weight:800;border-top-color:var(--acc)}
+@media print{body{background:#fff;color:#000}.tabs,#al,.noprint,.bk{display:none!important}main{max-width:none;padding:0}.card{break-inside:avoid;border-color:#999;background:#fff}:root{--tx:#000;--tx2:#333;--bd:#999;--grn:#0a5;--red:#a00}}
+</style>
+</head>
+<body>
+<main><div id="al"></div><div id="v"></div></main>
+<nav class="tabs" id="tabs"></nav>
+<script>
+var KEY="micaja.v1",S,tab="hoy",sub=null,sel,selW,selE,editIdx=-1;
+var BASE=[{n:"Alquiler casa",d:5,a:18000},{n:"Alquiler local",d:7,a:7500},{n:"Préstamo 2",d:15,a:13550},{n:"Teléfonos",d:20,a:3200},{n:"Luz",d:22,a:4000},{n:"Préstamo 1",d:28,a:10200}];
+var LOCAL=11700;
+var MES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+var DS=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+var FIELDS=[["lot","Lotería","Lo que cobraste hoy de lotería","--c1"],["med","Farmacia","Lo que vendiste hoy en la farmacia","--c2"],["food","Comida y gastos","Lo que sacaste hoy para comida y gastos","--c3"],["inv","Inversión","Lo que gastaste hoy en productos y medicamentos","--c4"]];
+function load(){var o=null;try{o=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+S=(o&&typeof o==="object")?o:{};
+var D={days:{},paid:{},custom:[],over:{},adj:[],weeks:{},est:750,mg:25,cash:"",gx:"",arrears:23000,gainA:22000,mode:"auto",ac:"verde",fs:1,inv:null,recv:[],debts:[{id:1,n:"Préstamo 1",bal:335000,ini:335000,link:"Préstamo 1",mv:[]},{id:2,n:"Préstamo 2",bal:200000,ini:200000,link:"Préstamo 2",mv:[]},{id:3,n:"Tarjeta de crédito",bal:25000,ini:25000,cuota:5000,pd:0,cd:0,card:1,mv:[]}]};
+for(var k in D)if(S[k]==null)S[k]=D[k]}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function $(i){return document.getElementById(i)}
+function p2(n){return n<10?"0"+n:""+n}
+function iso(d){return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate())}
+function pd(s){var a=s.split("-");return new Date(+a[0],+a[1]-1,+a[2])}
+function addD(d,n){return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n)}
+function wedOf(d){var x=addD(d,0);while(x.getDay()!==3)x=addD(x,-1);return x}
+function num(v){var n=parseFloat(v);return isNaN(n)?0:n}
+function money(n){var r=Math.round(n);return (r<0?"-":"")+"RD$"+Math.abs(r).toLocaleString("en-US")}
+function today(){var t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate())}
+function lab(d){return DS[d.getDay()]+" "+d.getDate()+" de "+MES[d.getMonth()]}
+function inp(id,ph,v){return '<input class="txt" id="'+id+'" type="number" inputmode="decimal" placeholder="'+ph+'" value="'+(v===undefined||v===null?"":v)+'">'}
+function GAIN(){return{n:"Ganancia de lotería",d:5,a:num(S.gainA)}}
+function pays(){var a=BASE.map(function(p){var o=S.over[p.n]||{};return{n:p.n,d:o.d||p.d,a:o.a!=null?o.a:p.a}});var c=a.concat(S.custom.map(function(p){return{n:p.n,d:p.d,a:p.a}}));(S.debts||[]).forEach(function(d){if(!d.link&&d.pd>0&&num(d.cuota)>0)c.push({n:d.n+(d.card?" (mínimo)":" (cuota)"),d:d.pd,a:num(d.cuota),der:1})});return c}
+function pkey(p,t){return t.getFullYear()+"-"+(t.getMonth()+1)+":"+p.n}
+function dueDate(p,y,m){var dim=new Date(y,m+1,0).getDate();return new Date(y,m,Math.min(p.d,dim))}
+function dueIn(p,t){return Math.round((dueDate(p,t.getFullYear(),t.getMonth())-t)/864e5)}
+function when(p,t){var d=dueIn(p,t);return d<0?["Venció hace "+(-d)+(d===-1?" día":" días"),"r"]:d===0?["Vence hoy","r"]:d===1?["Vence mañana","a"]:["Faltan "+d+" días",d<=3?"a":""]}
+function hasData(x){return x&&(num(x.lot)||num(x.med)||num(x.food)||num(x.inv))}
+function monthStats(t,closedOnly){var pre=t.getFullYear()+"-"+p2(t.getMonth()+1),r={lot:0,med:0,food:0,inv:0,n:0,foodToday:false};
+for(var k in S.days)if(k.indexOf(pre)===0){var x=S.days[k];if(closedOnly&&!x.closed)continue;r.lot+=num(x.lot);r.med+=num(x.med);r.food+=num(x.food);r.inv+=num(x.inv);r.n++}
+var x2=S.days[iso(t)];if(x2&&x2.food!==undefined&&x2.food!=="")r.foodToday=true;return r}
+function unclosed(){var tk=iso(today()),a=[];for(var k in S.days)if(k<tk&&hasData(S.days[k])&&!S.days[k].closed)a.push(k);return a.sort()}
+function upcoming(t){var pay7=0,in7=0,list=[];
+for(var mm=0;mm<2;mm++){var y=t.getFullYear(),m=t.getMonth()+mm;
+pays().forEach(function(p){var dd=dueDate(p,y,m),diff=Math.round((dd-t)/864e5);if(diff>7)return;if(S.paid[pkey(p,dd)])return;pay7+=p.a;list.push(p.n+" "+money(p.a)+(diff<0?" (vencido)":diff===0?" (hoy)":" (día "+p.d+")"))});
+var g=GAIN(),gd=dueDate(g,y,m),gdiff=Math.round((gd-t)/864e5);if(gdiff>=0&&gdiff<=7&&!S.paid[pkey(g,gd)])in7+=g.a}
+return{pay7:pay7,in7:in7,list:list}}
+function applyLook(){var r=document.documentElement;r.style.fontSize=(16*(S.fs||1))+"px";if(S.mode==="light"||S.mode==="dark")r.setAttribute("data-theme",S.mode);else r.removeAttribute("data-theme");if(S.ac&&S.ac!=="verde")r.setAttribute("data-ac",S.ac);else r.removeAttribute("data-ac")}
+function setTab(x){tab=x;sub=null;editIdx=-1;draw()}
+function goSub(x){sub=x;draw()}
+function goDay(k){sel=pd(k);tab="hoy";sub=null;draw()}
+function alerts(){var t=today(),b="";pays().forEach(function(p){if(S.paid[pkey(p,t)])return;var d=dueIn(p,t);if(d<=3){var w=when(p,t);b+='<div class="al big '+(d<=0?"r":"a")+'">'+w[0]+"<br>"+p.n+", "+money(p.a)+"</div>"}});return b}
+function draw(){applyLook();var h="";[["hoy","Hoy"],["pag","Pagos"],["mes","Mes"],["inv","Inversión"],["mas","Más"]].forEach(function(x){h+='<button class="'+(tab===x[0]?"on":"")+'" onclick="setTab(\''+x[0]+'\')">'+x[1]+"</button>"});
+$("tabs").innerHTML=h;$("al").innerHTML=alerts();
+if(tab==="hoy")vHoy();else if(tab==="pag")vPag();else if(tab==="mes")vMes();else if(tab==="inv")vInv();else vMas();window.scrollTo(0,0)}
+/* ---- HOY ---- */
+function vHoy(){
+var s=iso(sel),r=S.days[s]||{};
+var h='<h1>Hoy</h1><p class="sub" id="dl"></p><div class="nav"><button onclick="mv(-1)" aria-label="Día anterior">‹</button><input type="date" id="dt" value="'+s+'"><button onclick="mv(1)" aria-label="Día siguiente">›</button></div><div id="nc"></div>';
+FIELDS.forEach(function(f){h+='<label class="in" style="--c:var('+f[3]+')"><span class="lb">'+f[1]+'</span><span class="sb">'+f[2]+'</span><div class="box"><i>RD$</i><input id="f_'+f[0]+'" type="number" inputmode="decimal" min="0" placeholder="0" value="'+(r[f[0]]===undefined?"":r[f[0]])+'"></div></label>'});
+h+='<div class="card" id="sm"></div><button class="btn" id="cl"></button><div class="note">Se guarda solo mientras escribes. Al cerrar el día, cuenta en el progreso del mes.</div>';
+$("v").innerHTML=h;
+FIELDS.forEach(function(f){$("f_"+f[0]).addEventListener("input",function(){var x=S.days[s]||(S.days[s]={});x[f[0]]=$("f_"+f[0]).value;if(x.closed)x.snap=stmt(sel,false);save();upd()})});
+$("dt").addEventListener("change",function(){if($("dt").value){sel=pd($("dt").value);vHoy()}});
+$("cl").addEventListener("click",function(){var x=S.days[s]||(S.days[s]={});x.closed=!x.closed;if(x.closed)x.snap=stmt(sel,false);else delete x.snap;save();upd()});
+upd()}
+function mv(n){sel=addD(sel,n);vHoy()}
+function upd(){
+var s=iso(sel),r=S.days[s]||{},t=today();
+$("dl").textContent=lab(sel)+(s===iso(t)?" (hoy)":"");
+var g=num(r.med)-num(r.inv),n=g-num(r.food);
+$("sm").innerHTML='<h2>'+(r.closed?"Día cerrado ✓":"Resumen del día")+'</h2><div class="row"><span>Ganancia de farmacia (ventas − inversión)</span><b class="'+(g<0?"neg":"pos")+'">'+money(g)+'</b></div><div class="row"><span>Después de comida y gastos</span><b class="'+(n<0?"neg":"pos")+'">'+money(n)+'</b></div><div class="row"><span>Lotería de hoy, para depositar</span><b>'+money(num(r.lot))+'</b></div><div class="note">El dinero de lotería no es tuyo: no lo mezcles con tu ganancia.</div>';
+var c=$("cl");c.textContent=r.closed?"Día cerrado. Toca para reabrir":"Cerrar el día";c.className="btn"+(r.closed?" g":"");
+var u=unclosed(),b="";if(u.length)b='<div class="al a">Tienes '+u.length+(u.length===1?" día anterior sin cerrar.":" días anteriores sin cerrar.")+' <button class="btn s" style="margin-top:6px" onclick="goDay(\''+u[0]+'\')">Ir al más antiguo</button></div>';
+$("nc").innerHTML=b}
+/* ---- PAGOS ---- */
+function vPag(){
+var t=today(),G=GAIN(),list=pays().map(function(p,i){return{p:p,i:i,d:dueIn(p,t),ok:!!S.paid[pkey(p,t)]}});
+list.sort(function(a,b){return a.ok-b.ok||a.d-b.d});
+var h='<h1>Pagos del mes</h1><p class="sub">'+MES[t.getMonth()]+". Marca lo que ya pagaste.</p>";
+var nx=list.filter(function(x){return!x.ok})[0];
+if(nx){var w=when(nx.p,t);h+='<div class="al '+(w[1]==="r"?"r":w[1]==="a"?"a":"b")+'">Próximo: '+nx.p.n+", "+money(nx.p.a)+". "+w[0]+".</div>"}else h+='<div class="al g">No tienes pagos pendientes este mes.</div>';
+h+='<div class="card">';
+list.forEach(function(x){var w=when(x.p,t);
+h+='<div class="pay'+(x.ok?" done":"")+'"><input type="checkbox" '+(x.ok?"checked":"")+' onchange="tp('+x.i+')" aria-label="Pagado"><div class="t"><b>'+x.p.n+'</b><small class="'+(x.ok?"":w[1])+'">Día '+x.p.d+(x.ok?", pagado":", "+w[0])+'</small></div><span class="am">'+money(x.p.a)+'</span>'+(x.p.der?"":'<button class="btn s" onclick="edP('+x.i+')">Editar</button>')+'</div>';
+if(editIdx===x.i){h+='<div style="padding:4px 0 12px"><span class="lbl">Día del mes</span><input class="txt" id="ed" type="number" inputmode="numeric" value="'+x.p.d+'"><span class="lbl">Monto en RD$</span><input class="txt" id="ea" type="number" inputmode="decimal" value="'+x.p.a+'"><button class="btn" onclick="svP('+x.i+')">Guardar cambios</button>'+(x.i>=BASE.length?'<button class="btn o" onclick="rm('+(x.i-BASE.length)+')">Quitar este pago</button>':"")+"</div>"}});
+var gk=pkey(G,t);
+h+='</div><div class="card"><h2>Te llega este mes</h2><div class="pay'+(S.paid[gk]?" done":"")+'"><input type="checkbox" '+(S.paid[gk]?"checked":"")+' onchange="tg()" aria-label="Recibida"><div class="t"><b>'+G.n+'</b><small>Día '+G.d+', marca cuando la recibas</small></div><span class="am pos">+'+money(G.a)+'</span></div></div>';
+h+='<div class="card"><h2>Agregar un pago</h2><input class="txt" id="an" placeholder="Nombre (ej. Tarjeta)"><input class="txt" id="ad" type="number" inputmode="numeric" placeholder="Día del mes (1 a 31)"><input class="txt" id="aa" type="number" inputmode="decimal" placeholder="Monto en RD$"><button class="btn" onclick="addP()">Agregar</button></div>';
+$("v").innerHTML=h}
+function tp(i){var k=pkey(pays()[i],today());if(S.paid[k])delete S.paid[k];else S.paid[k]=iso(today());save();draw()}
+function tg(){var k=pkey(GAIN(),today());if(S.paid[k])delete S.paid[k];else S.paid[k]=iso(today());save();draw()}
+function edP(i){editIdx=editIdx===i?-1:i;vPag()}
+function svP(i){var d=Math.round(num($("ed").value)),a=num($("ea").value);if(d<1||d>31||a<=0)return;var p=pays()[i];if(i<BASE.length)S.over[p.n]={d:d,a:a};else{var c=S.custom[i-BASE.length];c.d=d;c.a=a}editIdx=-1;save();draw()}
+function addP(){var n=$("an").value.trim(),d=Math.round(num($("ad").value)),a=num($("aa").value);if(!n||d<1||d>31||a<=0)return;S.custom.push({n:n,d:d,a:a});save();draw()}
+function rm(i){S.custom.splice(i,1);editIdx=-1;save();draw()}
+/* ---- MES ---- */
+function vMes(){
+var t=today(),m=monthStats(t,false),mc=monthStats(t,true),dim=new Date(t.getFullYear(),t.getMonth()+1,0).getDate();
+var fijos=0,paid=0;pays().forEach(function(p){fijos+=p.a;if(S.paid[pkey(p,t)])paid+=p.a});
+var G=GAIN(),gain=S.paid[pkey(G,t)]?G.a:0,ing=(mc.med-mc.inv)+gain;
+var rem=dim-t.getDate()+(m.foodToday?0:1),meta=fijos+mc.food+num(S.est)*rem,pct=meta>0?Math.max(0,Math.min(1,ing/meta)):0,falta=Math.max(0,meta-ing),exp=t.getDate()/dim;
+var h='<h1>Mi mes</h1><p class="sub">'+MES[t.getMonth()]+'</p><div class="card"><h2>Progreso del mes</h2><div class="pct">'+Math.round(pct*100)+'%</div><div class="bar" role="progressbar" aria-valuenow="'+Math.round(pct*100)+'" aria-valuemin="0" aria-valuemax="100"><span style="width:'+(pct*100)+'%"></span><em style="left:'+(exp*100)+'%"></em></div><div class="note" style="margin-top:0">La raya negra marca dónde deberías ir hoy por la fecha. Solo cuenta días cerrados ('+mc.n+' de '+m.n+' con datos).</div>'+
+'<div class="al '+(pct>=exp?"g":"a")+'" style="margin-top:10px">'+(falta<=0?"Ya cubriste lo del mes.":(pct>=exp?"Vas al día. ":"Vas por debajo de la fecha. ")+"Te faltan "+money(falta)+(rem>0?", unos "+money(falta/rem)+" por día.":"."))+'</div></div>';
+h+='<div class="card"><h2>Cuentas del mes</h2><div class="row"><span>Ventas de farmacia</span><b>'+money(m.med)+'</b></div><div class="row"><span>Inversión en productos</span><b>'+money(m.inv)+'</b></div><div class="row"><span>Ganancia de farmacia</span><b class="'+(m.med-m.inv<0?"neg":"pos")+'">'+money(m.med-m.inv)+'</b></div><div class="row"><span>Ganancia de lotería recibida</span><b>'+money(gain)+'</b></div><div class="row"><span>Comida y gastos sacados</span><b>'+money(m.food)+'</b></div><div class="row"><span>Lotería recaudada, para depositar</span><b>'+money(m.lot)+'</b></div></div>';
+h+='<div class="card"><h2>¿La farmacia se paga sola?</h2>'+farm()+'</div>';
+var pp=fijos>0?paid/fijos:0;
+h+='<div class="card"><h2>Pagos fijos</h2><div class="bar"><span style="width:'+(pp*100)+'%"></span></div><div class="row"><span>Pagado</span><b class="pos">'+money(paid)+'</b></div><div class="row"><span>Pendiente</span><b class="'+(fijos-paid>0?"neg":"")+'">'+money(fijos-paid)+'</b></div></div>';
+h+='<div class="note">Meta del mes: pagos fijos, más comida y gastos del mes, más el estimado de los días que faltan. Se cubre con la ganancia de farmacia y la de lotería.</div>';
+$("v").innerHTML=h}
+function farm(){var from=iso(addD(today(),-29)),n=0,mg=0,sv=0;for(var k in S.days){var r=S.days[k];if(r.closed&&k>=from){n++;mg+=num(r.med)-num(r.inv);sv+=num(r.med)}}
+if(n<5)return '<div class="al b">Cierra al menos 5 días para evaluarla. Llevas '+n+' en los últimos 30.</div>';
+var avg=mg/n,proj=avg*30,diff=proj-LOCAL,pct=sv>0?mg/sv:0;
+var h='<div class="row"><span>Margen promedio por día</span><b>'+money(avg)+'</b></div><div class="row"><span>Margen proyectado al mes</span><b>'+money(proj)+'</b></div><div class="row"><span>Costo del local al mes</span><b>'+money(LOCAL)+'</b></div><div class="row"><span><b>Diferencia</b></span><b class="'+(diff<0?"neg":"pos")+'">'+money(diff)+'</b></div><div class="al '+(diff>=0?"g":"a")+'" style="margin-top:10px">'+(diff>=0?"La farmacia cubre el costo de su local.":"La farmacia no cubre su local: faltan "+money(-diff)+" al mes.")+"</div>";
+if(pct>0)h+='<div class="row"><span>Ventas diarias para cubrir el local</span><b>'+money(LOCAL/30/pct)+'</b></div><div class="row"><span>Tus ventas diarias promedio</span><b>'+money(sv/n)+'</b></div>';
+return h+'<div class="note">El margen usa lo que compras, no el costo de lo vendido. Si repusiste mucho inventario, se ve más bajo de lo real. Costo del local: alquiler, luz y teléfono.</div>'}
+/* ---- INVERSIÓN ---- */
+function invCalc(u){var I=S.inv;if(!I)return null;var st=I.start,c=0,v=0,adj=0;for(var k in S.days)if(k>=st&&(!u||k<=u)){c+=num(S.days[k].inv);v+=num(S.days[k].med)}
+var cost=v*(1-num(S.mg)/100);S.adj.forEach(function(x){if(x.d>=st&&(!u||x.d<=u))adj+=x.a});return{base:num(I.base),st:st,buy:c,sales:v,cost:cost,adj:adj,now:num(I.base)+c-cost+adj}}
+function vInv(){var C=invCalc(),h='<h1>Inversión de la farmacia</h1><p class="sub">El dinero que tienes puesto en productos y medicamentos, a precio de costo.</p>';
+if(!C){h+='<div class="card"><h2>Empieza aquí</h2><div class="sub" style="margin:0">¿Cuánto dinero tienes hoy en productos? Cuéntalo a lo que te costaron, no a lo que los vendes.</div>'+inp("iv0","Valor de tu existencia (RD$)","")+'<button class="btn" onclick="setBase()">Guardar</button></div>';$("v").innerHTML=h;return}
+h+='<div class="card"><div class="sub" style="margin:0">Existencia actual</div><div class="pct">'+money(C.now)+'</div>'+(C.now<0?'<div class="al a">El resultado salió negativo. Haz un conteo real abajo para corregirlo.</div>':"")+
+'<div class="row"><span>Valor inicial ('+C.st+')</span><b>'+money(C.base)+'</b></div><div class="row"><span>+ Compras anotadas desde esa fecha</span><b class="pos">'+money(C.buy)+'</b></div><div class="row"><span>− Costo estimado de lo vendido</span><b class="neg">'+money(C.cost)+'</b></div><div class="row"><span>± Ajustes</span><b>'+money(C.adj)+'</b></div></div>';
+var N=0,cs=0,from=iso(addD(today(),-29));for(var k in S.days)if(k>=from&&num(S.days[k].med)>0){N++;cs+=num(S.days[k].med)*(1-num(S.mg)/100)}
+var m=monthStats(today(),false),mcost=m.med*(1-num(S.mg)/100);
+h+='<div class="card"><h2>Este mes</h2><div class="row"><span>Compraste</span><b>'+money(m.inv)+'</b></div><div class="row"><span>Salió de tu existencia (costo estimado)</span><b>'+money(mcost)+'</b></div><div class="al '+(m.inv>mcost*1.2&&m.inv>0?"a":"b")+'" style="margin-top:10px">'+(m.inv>mcost*1.2&&m.inv>0?"Estás comprando más de lo que se vende: tu existencia está creciendo.":m.inv<mcost*0.8?"Estás vendiendo más de lo que compras: tu existencia está bajando.":"Compras y ventas van parejas.")+'</div>'+(N>=5&&cs>0?'<div class="row"><span>Tu existencia alcanza para</span><b>'+Math.round(Math.max(0,C.now)/(cs/N))+' días de ventas</b></div>':'<div class="note">Con 5 días de ventas anotados te digo para cuántos días alcanza tu existencia.</div>')+'</div>';
+h+='<div class="card"><h2>Registrar una compra</h2><div class="sub" style="margin:0">Se suma a la inversión de hoy y reajusta tu existencia.</div>'+inp("ic","Monto de la compra (RD$)","")+'<button class="btn" onclick="buy()">Sumar compra</button></div>';
+h+='<div class="card"><h2>Ajustar a un conteo real</h2><div class="sub" style="margin:0">Cuando cuentes tus productos, escribe cuánto valen. La app corrige la diferencia.</div>'+inp("ir","Valor real contado (RD$)","")+'<button class="btn" onclick="cnt()">Ajustar</button></div>';
+h+='<div class="card"><h2>Otro ajuste</h2><div class="sub" style="margin:0">Vencidos, mermas o devoluciones. Usa un número negativo para restar, por ejemplo -500.</div>'+inp("ia","Monto (+ o −)","")+'<input class="txt" id="in" placeholder="Motivo (ej. productos vencidos)"><button class="btn" onclick="adj()">Registrar ajuste</button>';
+var A=S.adj.map(function(x,i){return{x:x,i:i}}).reverse();
+if(A.length){h+='<div style="margin-top:10px">';A.slice(0,15).forEach(function(o){h+='<div class="hr" style="cursor:default"><span>'+o.x.d+', '+(o.x.n||"Ajuste")+'<small>'+(o.x.a>=0?"+":"")+money(o.x.a)+'</small></span><button class="btn s" onclick="rmAdj('+o.i+')">Quitar</button></div>'});h+="</div>"}
+h+='</div><div class="card"><h2>Margen de tus productos</h2><div class="sub" style="margin:0">Porcentaje aproximado que ganas sobre cada venta. Se usa para estimar cuánto de lo vendido era costo. Es un cálculo aproximado.</div>'+inp("im","Margen en %",S.mg)+'<button class="btn" onclick="setMg()">Guardar margen</button><button class="btn o" id="rb">Volver a empezar la existencia</button></div>';
+$("v").innerHTML=h;var cf=false;$("rb").addEventListener("click",function(){if(!cf){cf=true;$("rb").textContent="Toca otra vez para confirmar";return}S.inv=null;S.adj=[];save();vInv()})}
+function setBase(){var v=$("iv0").value;if(v===""||num(v)<0)return;S.inv={base:num(v),start:iso(today())};save();vInv()}
+function buy(){var a=num($("ic").value);if(a<=0)return;var k=iso(today()),x=S.days[k]||(S.days[k]={});x.inv=num(x.inv)+a;save();vInv()}
+function cnt(){var C=invCalc(),v=$("ir").value;if(!C||v==="")return;S.adj.push({d:iso(today()),a:num(v)-C.now,n:"Conteo real"});save();vInv()}
+function adj(){var a=num($("ia").value);if(!a)return;S.adj.push({d:iso(today()),a:a,n:$("in").value.trim()||"Ajuste"});save();vInv()}
+function rmAdj(i){S.adj.splice(i,1);save();vInv()}
+function setMg(){var v=num($("im").value);S.mg=Math.max(0,Math.min(90,v));save();vInv()}
+/* ---- ESTADO DE CUENTA ---- */
+function progAt(d,inc){var y=d.getFullYear(),m=d.getMonth(),pre=y+"-"+p2(m+1),k0=iso(d),dim=new Date(y,m+1,0).getDate(),mc={med:0,inv:0,food:0};
+for(var k in S.days)if(k.indexOf(pre)===0&&k<=k0&&(S.days[k].closed||(inc&&k===k0))){var z=S.days[k];mc.med+=num(z.med);mc.inv+=num(z.inv);mc.food+=num(z.food)}
+var fijos=0,paid=0;pays().forEach(function(p){fijos+=p.a;if(S.paid[pkey(p,d)])paid+=p.a});
+var G=GAIN(),gain=S.paid[pkey(G,d)]?G.a:0,ing=(mc.med-mc.inv)+gain,rem=dim-d.getDate(),meta=fijos+mc.food+num(S.est)*rem;
+return{pct:meta>0?Math.max(0,Math.min(1,ing/meta)):0,falta:Math.max(0,meta-ing),fijos:fijos,paid:paid}}
+function stmt(d,inc){var k=iso(d),x=S.days[k]||{},med=num(x.med),inv=num(x.inv),food=num(x.food),lot=num(x.lot),pre=k.slice(0,7),m={med:0,inv:0,food:0,lot:0};
+for(var q in S.days)if(q.indexOf(pre)===0&&q<=k){var z=S.days[q];m.med+=num(z.med);m.inv+=num(z.inv);m.food+=num(z.food);m.lot+=num(z.lot)}
+var P=progAt(d,inc),C=invCalc(k),np=null,best=1e9;
+pays().forEach(function(p){if(S.paid[pkey(p,d)])return;var df=Math.round((dueDate(p,d.getFullYear(),d.getMonth())-d)/864e5);if(df<best){best=df;np={n:p.n,a:p.a,d:df}}});
+var done=[];for(var kk in S.paid)if(S.paid[kk]===k)done.push(kk.slice(kk.indexOf(":")+1));
+var wl=0,ws=wedOf(d);for(var i=0;i<7;i++){var q2=iso(addD(ws,i));if(q2<=k&&S.days[q2])wl+=num(S.days[q2].lot)}
+return{k:k,med:med,inv:inv,food:food,lot:lot,gan:med-inv,net:med-inv-food,m:m,pct:P.pct,falta:P.falta,fijos:P.fijos,paid:P.paid,np:np,done:done,wl:wl,ex:C?C.now:null,rc:recvTotal(),db:debtTotal()}}
+function getSt(d){var x=S.days[iso(d)]||{};return(x.closed&&x.snap)?{s:x.snap,live:false}:{s:stmt(d,true),live:true}}
+function stText(d,s){return "Estado de cuenta, "+lab(d)+"\nVentas de farmacia: "+money(s.med)+"\nInversión del día: "+money(s.inv)+"\nGanancia de farmacia: "+money(s.gan)+"\nComida y gastos: "+money(s.food)+"\nQueda después de gastos: "+money(s.net)+"\nLotería para depositar: "+money(s.lot)+"\nProgreso del mes: "+Math.round(s.pct*100)+"%, faltan "+money(s.falta)+"\nPagos fijos pendientes: "+money(s.fijos-s.paid)+(s.np?"\nPróximo pago: "+s.np.n+" "+money(s.np.a):"")+(s.ex!==null?"\nExistencia en productos: "+money(s.ex):"")+(s.rc!==undefined?"\nPor cobrar a clientes: "+money(s.rc)+"\nTotal de deudas: "+money(s.db):"")}
+function vEst(){var d=selE,k=iso(d),G=getSt(d),s=G.s;
+var h=BK+'<h1>Estado de cuenta</h1><p class="sub">Lo más importante de cada día.</p><div class="nav"><button onclick="mvE(-1)" aria-label="Día anterior">‹</button><input type="date" id="et" value="'+k+'"><button onclick="mvE(1)" aria-label="Día siguiente">›</button></div>'+
+'<div class="sub" style="font-weight:700;color:var(--tx);margin-bottom:8px">'+lab(d)+(k===iso(today())?" (hoy)":"")+'</div>'+
+(G.live?'<div class="al a">Borrador: este día no está cerrado. Se actualiza solo mientras anotas. Al cerrar el día, el informe queda guardado.</div>':'<div class="al g">Informe guardado al cerrar el día ✓</div>');
+h+='<div class="card"><h2>Del día</h2><div class="row"><span>Ventas de farmacia</span><b>'+money(s.med)+'</b></div><div class="row"><span>Inversión en productos</span><b>'+money(s.inv)+'</b></div><div class="row"><span>Ganancia de farmacia</span><b class="'+(s.gan<0?"neg":"pos")+'">'+money(s.gan)+'</b></div><div class="row"><span>Comida y gastos</span><b>'+money(s.food)+'</b></div><div class="row"><span><b>Queda después de gastos</b></span><b class="'+(s.net<0?"neg":"pos")+'">'+money(s.net)+'</b></div><div class="row"><span>Lotería, para depositar</span><b>'+money(s.lot)+'</b></div></div>';
+h+='<div class="card"><h2>Acumulado del mes hasta este día</h2><div class="row"><span>Ventas de farmacia</span><b>'+money(s.m.med)+'</b></div><div class="row"><span>Inversión en productos</span><b>'+money(s.m.inv)+'</b></div><div class="row"><span>Ganancia de farmacia</span><b class="'+(s.m.med-s.m.inv<0?"neg":"pos")+'">'+money(s.m.med-s.m.inv)+'</b></div><div class="row"><span>Comida y gastos</span><b>'+money(s.m.food)+'</b></div><div class="row"><span>Lotería recaudada</span><b>'+money(s.m.lot)+'</b></div>'+
+'<div class="pct" style="margin-top:8px">'+Math.round(s.pct*100)+'%</div><div class="bar"><span style="width:'+(s.pct*100)+'%"></span></div><div class="note" style="margin-top:0">Progreso del mes a esta fecha. Faltaban '+money(s.falta)+' para cubrir el mes.</div></div>';
+h+='<div class="card"><h2>Pagos</h2><div class="row"><span>Pagos fijos pagados</span><b class="pos">'+money(s.paid)+'</b></div><div class="row"><span>Pendientes</span><b class="'+(s.fijos-s.paid>0?"neg":"")+'">'+money(s.fijos-s.paid)+'</b></div><div class="row"><span>Próximo pago</span><b>'+(s.np?s.np.n+", "+(s.np.d<0?"vencido":s.np.d===0?"hoy":"en "+s.np.d+" días"):"Ninguno")+'</b></div><div class="row"><span>Pagos marcados este día</span><b>'+(s.done.length?s.done.join(", "):"Ninguno")+'</b></div></div>';
+h+='<div class="card"><h2>Inversión y lotería</h2><div class="row"><span>Existencia en productos</span><b>'+(s.ex!==null?money(s.ex):"Sin configurar")+'</b></div><div class="row"><span>Lotería de la semana hasta este día</span><b>'+money(s.wl)+'</b></div>'+(s.rc!==undefined?'<div class="row"><span>Por cobrar a clientes</span><b>'+money(s.rc)+'</b></div><div class="row"><span>Total de deudas</span><b>'+money(s.db)+'</b></div>':"")+'</div>';
+h+='<button class="btn" id="ec">Copiar informe para WhatsApp</button><div id="em" class="note"></div>';
+var ks=[];for(var i=0;i<7;i++)ks.push(iso(addD(today(),-i)));
+h+='<div class="card" style="margin-top:12px"><h2>Últimos 7 días</h2>';
+ks.forEach(function(q){var x=S.days[q]||{},dd=pd(q);h+='<button class="hr" onclick="goE(\''+q+'\')"><span>'+lab(dd)+'<small>Ganancia de farmacia '+money(num(x.med)-num(x.inv))+', lotería '+money(num(x.lot))+'</small></span><b class="'+(x.closed?"pos":"")+'">'+(x.closed?"Guardado ✓":hasData(x)?"Borrador":"Sin datos")+'</b></button>'});
+h+='</div>';
+$("v").innerHTML=h;
+$("et").addEventListener("change",function(){if($("et").value){selE=pd($("et").value);vEst()}});
+$("ec").addEventListener("click",function(){var t=stText(d,s),ok=false;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){$("em").textContent="Copiado. Pégalo en WhatsApp o en tus notas."},function(){$("em").textContent="No se pudo copiar. Intenta de nuevo."});ok=true}}catch(e){}if(!ok)$("em").textContent="Tu navegador no permite copiar desde aquí."})}
+function mvE(n){selE=addD(selE,n);vEst()}
+function goE(k){selE=pd(k);vEst()}
+/* ---- CUENTAS POR COBRAR ---- */
+var rcOpen=0,rcDel=0,dbOpen=0,dbDel=0,selM;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function rcSaldo(c){var s=0;c.mv.forEach(function(m){s+=m.t==="f"?m.a:-m.a});return s}
+function recvTotal(){var t=0;S.recv.forEach(function(c){var s=rcSaldo(c);if(s>0.005)t+=s});return t}
+function ago(k){var d=Math.round((today()-pd(k))/864e5);return d<=0?"hoy":d===1?"ayer":"hace "+d+" días"}
+function vRec(){var L=S.recv.map(function(c){return{c:c,s:rcSaldo(c)}}),act=L.filter(function(x){return x.s>0.005}).sort(function(a,b){return b.s-a.s}),done=L.filter(function(x){return x.s<=0.005});
+var h=BK+'<h1>Cuentas por cobrar</h1><p class="sub">Lo que tus clientes te deben.</p><div class="card"><div class="sub" style="margin:0">Total por cobrar</div><div class="pct">'+money(recvTotal())+'</div><div class="note" style="margin-top:0">'+act.length+(act.length===1?" cliente con saldo":" clientes con saldo")+'</div></div>';
+h+='<div class="card"><h2>Agregar un fiado</h2><input class="txt" id="rn" placeholder="Nombre del cliente"><input class="txt" id="ra" type="number" inputmode="decimal" placeholder="Monto que debe (RD$)"><input class="txt" id="rt" placeholder="Nota (opcional, ej. medicinas)"><button class="btn" onclick="addRc()">Guardar</button><div class="note">Si el cliente ya existe, el monto se suma a su saldo.</div></div>';
+act.forEach(function(x){h+=rcCard(x)});
+if(done.length){h+='<div class="card"><h2>Clientes sin deuda ('+done.length+')</h2>';done.forEach(function(x){h+='<button class="hr" onclick="rcTog('+x.c.id+')"><span>'+esc(x.c.n)+'<small>Saldado</small></span><b class="pos">'+money(0)+'</b></button>'+(rcOpen===x.c.id?rcDetail(x):"")});h+='</div>'}
+h+='<div class="note">Cuando fías una venta, anótala en Hoy como venta, pero recuerda que ese dinero aún no entró. Cuando el cliente pague, solo regístralo aquí como abono; no lo vuelvas a anotar como venta.</div>';
+$("v").innerHTML=h}
+function rcCard(x){var c=x.c,last=c.mv.length?c.mv[c.mv.length-1].d:null;
+return '<div class="card"><button class="hr" style="border:0;padding:0" onclick="rcTog('+c.id+')"><span><b style="font-size:17px">'+esc(c.n)+'</b><small>'+(last?"Último movimiento "+ago(last):"")+'</small></span><b class="neg" style="font-size:20px">'+money(x.s)+'</b></button>'+(rcOpen===c.id?rcDetail(x):"")+"</div>"}
+function rcDetail(x){var c=x.c,h='<div style="padding-top:10px"><span class="lbl" style="margin-top:0">Monto (RD$)</span><input class="txt" id="rm" type="number" inputmode="decimal" placeholder="0"><button class="btn" onclick="rcMv('+c.id+',\'a\')">Registrar abono</button><button class="btn" style="background:var(--card);color:var(--acc);border:1px solid var(--acc)" onclick="rcMv('+c.id+',\'f\')">Sumar otro fiado</button>'+(x.s>0.005?'<button class="btn g" onclick="rcAll('+c.id+')">Saldar todo ('+money(x.s)+')</button>':"")+'<div style="margin-top:10px">';
+c.mv.map(function(m,i){return{m:m,i:i}}).reverse().slice(0,12).forEach(function(o){h+='<div class="hr" style="cursor:default"><span>'+o.m.d+', '+(o.m.t==="f"?"Fiado":"Abono")+(o.m.n?", "+esc(o.m.n):"")+'<small>'+(o.m.t==="f"?"+":"−")+money(o.m.a)+'</small></span><button class="btn s" onclick="rcDelMv('+c.id+','+o.i+')">Quitar</button></div>'});
+return h+'</div><button class="btn o" onclick="rcDelC('+c.id+')">'+(rcDel===c.id?"Toca otra vez para quitar al cliente":"Quitar este cliente")+'</button></div>'}
+function rcTog(id){rcOpen=rcOpen===id?0:id;rcDel=0;vRec()}
+function addRc(){var n=$("rn").value.trim(),a=num($("ra").value),nt=$("rt").value.trim();if(!n||a<=0)return;var c=null;S.recv.forEach(function(q){if(q.n.toLowerCase()===n.toLowerCase())c=q});if(!c){c={id:Date.now(),n:n,mv:[]};S.recv.push(c)}c.mv.push({d:iso(today()),t:"f",a:a,n:nt});rcOpen=c.id;save();vRec()}
+function rcFind(id){var r=null;S.recv.forEach(function(c){if(c.id===id)r=c});return r}
+function rcMv(id,t){var c=rcFind(id),a=num($("rm").value);if(!c||a<=0)return;if(t==="a"){var s=rcSaldo(c);if(a>s)a=Math.max(0,s);if(a<=0)return}c.mv.push({d:iso(today()),t:t,a:a});save();vRec()}
+function rcAll(id){var c=rcFind(id);if(!c)return;var s=rcSaldo(c);if(s>0)c.mv.push({d:iso(today()),t:"a",a:s,n:"Saldó todo"});save();vRec()}
+function rcDelMv(id,i){var c=rcFind(id);if(!c)return;c.mv.splice(i,1);save();vRec()}
+function rcDelC(id){if(rcDel!==id){rcDel=id;vRec();return}S.recv=S.recv.filter(function(c){return c.id!==id});rcDel=0;rcOpen=0;save();vRec()}
+/* ---- DEUDAS CON SALDO ---- */
+function cuotaOf(d){if(d.link){var r=0;pays().forEach(function(p){if(p.n===d.link)r=p.a});return r}return num(d.cuota)}
+function debtTotal(){var t=0;S.debts.forEach(function(d){t+=Math.max(0,num(d.bal))});return t}
+function dFind(id){var r=null;S.debts.forEach(function(d){if(d.id===id)r=d});return r}
+function vDeu(){var tb=0,ti=0,tc=0;S.debts.forEach(function(d){tb+=num(d.bal);ti+=Math.max(num(d.ini),num(d.bal));tc+=cuotaOf(d)});
+var pc=ti>0?Math.max(0,Math.min(1,(ti-tb)/ti)):0;
+var h=BK+'<h1>Deudas con saldo</h1><p class="sub">Préstamos y tarjeta. El saldo baja con cada pago que registres.</p><div class="card"><div class="sub" style="margin:0">Total que debes</div><div class="pct">'+money(tb)+'</div><div class="bar"><span style="width:'+(pc*100)+'%"></span></div><div class="row"><span>Pagado desde que empezaste a registrar</span><b class="pos">'+Math.round(pc*100)+'%</b></div><div class="row"><span>Cuotas mensuales sumadas</span><b>'+money(tc)+'</b></div></div>';
+S.debts.forEach(function(d){var bal=num(d.bal),cu=cuotaOf(d),n=cu>0?Math.ceil(bal/cu):0,p=Math.max(num(d.ini),bal),pp=p>0?Math.max(0,Math.min(1,(p-bal)/p)):0;
+var dt=new Date(today().getFullYear(),today().getMonth()+n,1);
+h+='<div class="card"><button class="hr" style="border:0;padding:0" onclick="dbTog('+d.id+')"><span><b style="font-size:17px">'+esc(d.n)+'</b><small>Cuota '+money(cu)+(d.pd?', pago el día '+d.pd:"")+'</small></span><b class="'+(bal>0?"neg":"pos")+'" style="font-size:20px">'+money(bal)+'</b></button><div class="bar"><span style="width:'+(pp*100)+'%"></span></div>'+(cu>0&&bal>0?'<div class="note" style="margin-top:0">Unas '+n+(n===1?" cuota":" cuotas")+' para terminar, cerca de '+(n>120?"más de 10 años":MES[dt.getMonth()]+" de "+dt.getFullYear())+'. Cálculo sin intereses.</div>':"")+(dbOpen===d.id?dbDetail(d):"")+'</div>'});
+h+='<div class="card"><h2>Agregar una deuda</h2><input class="txt" id="dn" placeholder="Nombre (ej. Préstamo 3)"><input class="txt" id="db" type="number" inputmode="decimal" placeholder="Saldo que debes (RD$)"><input class="txt" id="dc" type="number" inputmode="decimal" placeholder="Cuota mensual (RD$)"><input class="txt" id="dd" type="number" inputmode="numeric" placeholder="Día de pago (opcional)"><button class="btn" onclick="addDb()">Agregar</button></div>';
+h+='<div class="note">Los saldos de Préstamo 1, Préstamo 2 y la tarjeta salen de tu informe. Confírmalos con tu banco. Si pones el pago en la tarjeta con su día, aparece también en Pagos. Los intereses no se calculan: si el banco te da el saldo real, usa Ajustar saldo.</div>';
+$("v").innerHTML=h}
+function dbDetail(d){var h='<div style="padding-top:10px"><span class="lbl" style="margin-top:0">Pago que baja el saldo (RD$)</span><input class="txt" id="dp" type="number" inputmode="decimal" placeholder="'+(cuotaOf(d)||0)+'"><button class="btn" onclick="dbPay('+d.id+')">Registrar pago</button><div class="note" style="margin-top:4px">Anota lo que realmente baja tu deuda. Si no sabes cuánto es capital, usa la cuota y corrige con Ajustar saldo.</div><span class="lbl">Saldo real según el banco (RD$)</span><input class="txt" id="dq" type="number" inputmode="decimal" placeholder="Nuevo saldo"><button class="btn" style="background:var(--card);color:var(--acc);border:1px solid var(--acc)" onclick="dbSet('+d.id+')">Ajustar saldo</button>';
+if(!d.link){h+='<span class="lbl">Cuota mensual (RD$)</span><input class="txt" id="dcu" type="number" inputmode="decimal" value="'+num(d.cuota)+'"><span class="lbl">Día de pago del mes</span><input class="txt" id="dpd" type="number" inputmode="numeric" value="'+(d.pd||"")+'"><button class="btn" style="background:var(--card);color:var(--acc);border:1px solid var(--acc)" onclick="dbCfg('+d.id+')">Guardar cuota y día</button>'}
+if(d.card)h+='<span class="lbl">Día de corte (solo informativo)</span><input class="txt" id="dcd" type="number" inputmode="numeric" value="'+(d.cd||"")+'"><div class="note" style="margin-top:4px">El corte no es la fecha de pago. Confirma las dos en tu aplicación del banco.</div>';
+h+='<div style="margin-top:10px">';d.mv.map(function(m,i){return{m:m,i:i}}).reverse().slice(0,10).forEach(function(o){h+='<div class="hr" style="cursor:default"><span>'+o.m.d+', '+(o.m.n||"Pago")+'<small>'+(o.m.a>=0?"baja ":"sube ")+money(Math.abs(o.m.a))+'</small></span><button class="btn s" onclick="dbUndo('+d.id+','+o.i+')">Quitar</button></div>'});
+return h+'</div><button class="btn o" onclick="dbRm('+d.id+')">'+(dbDel===d.id?"Toca otra vez para quitar la deuda":"Quitar esta deuda")+'</button></div>'}
+function dbTog(id){dbOpen=dbOpen===id?0:id;dbDel=0;vDeu()}
+function dbPay(id){var d=dFind(id),a=num($("dp").value)||cuotaOf(d);if(!d||a<=0)return;a=Math.min(a,Math.max(0,num(d.bal)));d.bal=num(d.bal)-a;d.mv.push({d:iso(today()),a:a,n:"Pago"});save();vDeu()}
+function dbSet(id){var d=dFind(id),v=$("dq").value;if(!d||v==="")return;var n=Math.max(0,num(v)),df=num(d.bal)-n;d.mv.push({d:iso(today()),a:df,n:"Ajuste de saldo"});d.bal=n;if(n>num(d.ini))d.ini=n;save();vDeu()}
+function dbUndo(id,i){var d=dFind(id);if(!d)return;d.bal=num(d.bal)+num(d.mv[i].a);d.mv.splice(i,1);save();vDeu()}
+function dbCfg(id){var d=dFind(id);if(!d)return;d.cuota=num($("dcu").value);var x=Math.round(num($("dpd").value));d.pd=(x>=1&&x<=31)?x:0;var c=$("dcd");if(c){var y=Math.round(num(c.value));d.cd=(y>=1&&y<=31)?y:0}save();vDeu()}
+function addDb(){var n=$("dn").value.trim(),b=num($("db").value);if(!n||b<=0)return;var x=Math.round(num($("dd").value));S.debts.push({id:Date.now(),n:n,bal:b,ini:b,cuota:num($("dc").value),pd:(x>=1&&x<=31)?x:0,mv:[]});save();vDeu()}
+function dbRm(id){if(dbDel!==id){dbDel=id;vDeu();return}S.debts=S.debts.filter(function(d){return d.id!==id});dbDel=0;dbOpen=0;save();vDeu()}
+/* ---- INFORME MENSUAL ---- */
+function nf(n){return Math.round(n).toLocaleString("en-US")}
+function repData(M){var y=M.getFullYear(),m=M.getMonth(),pre=y+"-"+p2(m+1),dim=new Date(y,m+1,0).getDate(),R={y:y,m:m,rows:[],med:0,inv:0,food:0,lot:0,closed:0,n:0};
+for(var d=1;d<=dim;d++){var k=pre+"-"+p2(d),x=S.days[k];if(x&&(hasData(x)||x.closed)){R.rows.push({k:k,d:d,med:num(x.med),inv:num(x.inv),food:num(x.food),lot:num(x.lot),c:!!x.closed});R.med+=num(x.med);R.inv+=num(x.inv);R.food+=num(x.food);R.lot+=num(x.lot);R.n++;if(x.closed)R.closed++}}
+var end=new Date(y,m,dim),ref=today()<end?today():end;R.ref=ref;R.P=progAt(ref,false);
+var Dm=new Date(y,m,1);R.pays=pays().map(function(p){return{p:p,ok:!!S.paid[pkey(p,Dm)]}});var G=GAIN();R.gain=S.paid[pkey(G,Dm)]?G.a:0;R.ex=invCalc(iso(end));return R}
+function repText(R){var s="Informe de "+MES[R.m]+" "+R.y+"\nVentas de farmacia: "+money(R.med)+"\nInversión en productos: "+money(R.inv)+"\nGanancia de farmacia: "+money(R.med-R.inv)+"\nComida y gastos: "+money(R.food)+"\nLotería recaudada, para depositar: "+money(R.lot)+"\nGanancia de lotería recibida: "+money(R.gain)+"\nProgreso del mes: "+Math.round(R.P.pct*100)+"%";
+var pp=0,pn=0;R.pays.forEach(function(x){if(x.ok)pp+=x.p.a;else pn+=x.p.a});s+="\nPagos fijos pagados: "+money(pp)+", pendientes: "+money(pn)+"\nTotal de deudas: "+money(debtTotal())+"\nPor cobrar a clientes: "+money(recvTotal());if(R.ex)s+="\nExistencia en productos al cierre: "+money(R.ex.now);return s}
+function vInf(){var R=repData(selM),h=BK+'<h1>Informe mensual</h1><p class="sub noprint">Elige un mes. Luego guárdalo como PDF o cópialo.</p><div class="nav noprint"><button onclick="mvM(-1)" aria-label="Mes anterior">‹</button><div class="lb">'+MES[R.m]+" "+R.y+'</div><button onclick="mvM(1)" aria-label="Mes siguiente">›</button></div>';
+h+='<div id="rp"><h1 style="margin-bottom:2px">Informe de '+MES[R.m]+" "+R.y+'</h1><div class="sub">Mi Caja. Creado el '+lab(today())+'. '+R.closed+' de '+R.n+' días con datos están cerrados.</div>';
+h+='<div class="card"><h2>Farmacia</h2><div class="row"><span>Ventas</span><b>'+money(R.med)+'</b></div><div class="row"><span>Inversión en productos</span><b>'+money(R.inv)+'</b></div><div class="row"><span><b>Ganancia (ventas − inversión)</b></span><b class="'+(R.med-R.inv<0?"neg":"pos")+'">'+money(R.med-R.inv)+'</b></div><div class="row"><span>Comida y gastos</span><b>'+money(R.food)+'</b></div><div class="row"><span>Queda después de gastos</span><b>'+money(R.med-R.inv-R.food)+'</b></div></div>';
+h+='<div class="card"><h2>Lotería</h2><div class="row"><span>Recaudada, para depositar</span><b>'+money(R.lot)+'</b></div><div class="row"><span>Ganancia recibida</span><b>'+money(R.gain)+'</b></div></div>';
+h+='<div class="card"><h2>Progreso del mes</h2><div class="pct">'+Math.round(R.P.pct*100)+'%</div><div class="bar"><span style="width:'+(R.P.pct*100)+'%"></span></div><div class="note" style="margin-top:0">A la fecha '+lab(R.ref)+'. Faltaban '+money(R.P.falta)+' para cubrir el mes. Cuenta solo días cerrados.</div></div>';
+var tp=0;h+='<div class="card"><h2>Pagos fijos</h2>';R.pays.forEach(function(x){tp+=x.p.a;h+='<div class="row"><span>Día '+x.p.d+', '+esc(x.p.n)+'</span><b class="'+(x.ok?"pos":"neg")+'">'+money(x.p.a)+(x.ok?" ✓":"")+'</b></div>'});h+='<div class="note">✓ significa pagado. Los montos son los de hoy.</div></div>';
+h+='<div class="card"><h2>Deudas con saldo</h2>';S.debts.forEach(function(d){h+='<div class="row"><span>'+esc(d.n)+'</span><b>'+money(num(d.bal))+'</b></div>'});h+='<div class="row"><span><b>Total</b></span><b>'+money(debtTotal())+'</b></div></div>';
+h+='<div class="card"><h2>Por cobrar a clientes</h2>';var any=0;S.recv.forEach(function(c){var s=rcSaldo(c);if(s>0.005){any=1;h+='<div class="row"><span>'+esc(c.n)+'</span><b>'+money(s)+'</b></div>'}});if(!any)h+='<div class="note" style="margin-top:0">Nadie te debe.</div>';else h+='<div class="row"><span><b>Total</b></span><b>'+money(recvTotal())+'</b></div>';h+='</div>';
+h+='<div class="card"><h2>Existencia en productos</h2><div class="row"><span>Al cierre del mes</span><b>'+(R.ex?money(R.ex.now):"Sin configurar")+'</b></div></div>';
+h+='<div class="card"><h2>Día por día</h2><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="text-align:right"><th style="text-align:left">Día</th><th>Ventas</th><th>Inversión</th><th>Comida</th><th>Lotería</th></tr>';
+R.rows.forEach(function(r){h+='<tr style="text-align:right;border-top:1px solid var(--bd)"><td style="text-align:left;padding:5px 0">'+r.d+(r.c?" ✓":"")+'</td><td>'+nf(r.med)+'</td><td>'+nf(r.inv)+'</td><td>'+nf(r.food)+'</td><td>'+nf(r.lot)+'</td></tr>'});
+h+='<tr style="text-align:right;border-top:2px solid var(--tx);font-weight:700"><td style="text-align:left;padding:5px 0">Total</td><td>'+nf(R.med)+'</td><td>'+nf(R.inv)+'</td><td>'+nf(R.food)+'</td><td>'+nf(R.lot)+'</td></tr></table></div><div class="note">Montos en RD$. ✓ significa día cerrado.</div></div><div class="note">Documento de trabajo con los datos anotados en Mi Caja. Confirma montos y saldos con cada entidad.</div></div>';
+h+='<button class="btn noprint" id="pp">Imprimir o guardar como PDF</button><button class="btn noprint" id="pc" style="background:var(--card);color:var(--acc);border:1px solid var(--acc)">Copiar informe en texto</button><div id="pm" class="note noprint"></div>';
+$("v").innerHTML=h;
+$("pp").addEventListener("click",function(){try{window.print();$("pm").textContent="En la ventana de impresión, elige Guardar como PDF. Si no se abre, usa el menú de tu navegador: Imprimir o Compartir."}catch(e){$("pm").textContent="No se pudo abrir la impresión aquí. Usa el menú de tu navegador: Imprimir o Compartir, y elige Guardar como PDF."}});
+$("pc").addEventListener("click",function(){var t=repText(R),ok=false;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){$("pm").textContent="Copiado. Pégalo en WhatsApp o en tus notas."},function(){$("pm").textContent="No se pudo copiar. Intenta de nuevo."});ok=true}}catch(e){}if(!ok)$("pm").textContent="Tu navegador no permite copiar desde aquí."})}
+function mvM(n){selM=new Date(selM.getFullYear(),selM.getMonth()+n,1);vInf()}
+/* ---- MÁS ---- */
+function vMas(){
+if(sub==="rec")return vRec();if(sub==="deu")return vDeu();if(sub==="inf")return vInf();if(sub==="est")return vEst();if(sub==="lot")return vLot();if(sub==="gas")return vGas();if(sub==="his")return vHis();if(sub==="tip")return vTip();if(sub==="aj")return vAj();
+var M=[["est","Estado de cuenta por día","Informe de lo más importante de cada día, guardado al cerrar"],["rec","Cuentas por cobrar","Lo que tus clientes te deben, con abonos y saldo"],["deu","Deudas con saldo","Préstamos y tarjeta: el saldo baja con cada pago"],["inf","Informe mensual","El cierre del mes, para guardar como PDF o copiar"],["lot","Control de lotería del miércoles","Lo que te exige el operador, lo que pagaste y el atraso"],["gas","¿Puedo gastar esto?","Escribe un monto y mira si alcanza para los próximos 7 días"],["his","Historial","Los días anteriores, para revisar o corregir"],["tip","Tips para llevar las cuentas","Consejos básicos de orden"],["aj","Ajustes y respaldo","Letras, colores, y copia de tus datos"]];
+var h='<h1>Más</h1><p class="sub">Otras herramientas.</p>';M.forEach(function(x){h+='<button class="mn" onclick="goSub(\''+x[0]+'\')"><b>'+x[1]+'</b><span>'+x[2]+'</span></button>'});$("v").innerHTML=h}
+var BK='<button class="bk" onclick="goSub(null)">‹ Más</button>';
+/* lotería */
+function vLot(){var ws=selW,s=iso(ws),W=S.weeks[s]||{},we=addD(ws,6),nx=addD(ws,7);
+var h=BK+'<h1>Lotería del miércoles</h1><p class="sub">Semana de miércoles a martes. Se liquida el miércoles siguiente.</p><div class="nav"><button onclick="mvW(-1)" aria-label="Semana anterior">‹</button><div class="lb">'+ws.getDate()+" "+MES[ws.getMonth()].slice(0,3)+" al "+we.getDate()+" "+MES[we.getMonth()].slice(0,3)+'</div><button onclick="mvW(1)" aria-label="Semana siguiente">›</button></div>'+
+'<div class="card"><h2>Se liquida el '+nx.getDate()+" de "+MES[nx.getMonth()]+'</h2><span class="lbl">Importe que exige el operador (RD$)</span>'+inp("due","0",W.due)+'<span class="lbl">Pago realizado al operador, incluido el abono al atraso (RD$)</span>'+inp("paid","0",W.paid)+'</div><div id="lo"></div>'+
+'<div class="card"><h2>Atraso de partida</h2><div class="sub" style="margin:0">Lo que debías al operador antes de empezar a usar este control.</div>'+inp("ar","0",S.arrears)+'</div><div class="note">La recaudación sale de lo que anotas como Lotería en Hoy.</div>';
+$("v").innerHTML=h;
+$("due").addEventListener("input",function(){var x=S.weeks[s]||(S.weeks[s]={});x.due=$("due").value;save();loOut()});
+$("paid").addEventListener("input",function(){var x=S.weeks[s]||(S.weeks[s]={});x.paid=$("paid").value;save();loOut()});
+$("ar").addEventListener("input",function(){S.arrears=num($("ar").value);save();loOut()});loOut()}
+function mvW(n){selW=addD(selW,7*n);vLot()}
+function loOut(){var ws=selW,s=iso(ws),W=S.weeks[s]||{},lot=0;for(var i=0;i<7;i++){var x=S.days[iso(addD(ws,i))];if(x)lot+=num(x.lot)}
+var before=num(S.arrears);for(var k in S.weeks)if(k<s)before+=num(S.weeks[k].due)-num(S.weeks[k].paid);
+var due=num(W.due),paid=num(W.paid),after=before+due-paid,h="";
+if(due>0&&lot<due)h+='<div class="al r">La recaudación ('+money(lot)+') es menor que lo exigido ('+money(due)+'). Faltan '+money(due-lot)+': define de dónde saldrán antes del miércoles.</div>';
+if(due>0&&paid<due)h+='<div class="al a">Pagaste '+money(paid)+' de '+money(due)+': quedas debiendo '+money(due-paid)+' de esta semana.</div>';
+if(due>0&&paid>=due&&after<=0)h+='<div class="al g">Semana al día y sin atraso.</div>';
+h+='<div class="card"><h2>Cuenta de la semana</h2><div class="row"><span>Atraso anterior</span><b>'+money(before)+'</b></div><div class="row"><span>+ Exigido esta semana</span><b>'+money(due)+'</b></div><div class="row"><span>− Pago realizado</span><b>'+money(paid)+'</b></div><div class="row"><span><b>Atraso nuevo</b></span><b class="'+(after>0?"neg":"pos")+'">'+money(after)+'</b></div><div class="row"><span>Lotería recaudada esta semana</span><b>'+money(lot)+'</b></div></div>';
+$("lo").innerHTML=h}
+/* ¿puedo gastar? */
+function vGas(){var h=BK+'<h1>¿Puedo gastar esto?</h1><p class="sub">Cuenta tu efectivo propio, sin el dinero de la lotería.</p><div class="card"><span class="lbl" style="margin-top:0">Efectivo propio que tienes hoy (RD$)</span>'+inp("gc","0",S.cash)+'<div class="note" style="margin-top:4px">Cuéntalo y actualízalo cuando quieras.</div><span class="lbl">Monto que quieres gastar (RD$)</span>'+inp("gx","0",S.gx)+'</div><div id="go"></div>';
+$("v").innerHTML=h;$("gc").addEventListener("input",function(){S.cash=$("gc").value;save();goOut()});$("gx").addEventListener("input",function(){S.gx=$("gx").value;save();goOut()});goOut()}
+function goOut(){var U=upcoming(today()),c=num(S.cash),a=num(S.gx),f=num(S.est)*7,left=c-a-U.pay7-f+U.in7,h="";
+if(a<=0)h+='<div class="vd b">Escribe un monto para ver si alcanza.</div>';else if(left>=0)h+='<div class="vd g">Alcanza. Te quedarían '+money(left)+' sobre lo que necesitas para 7 días.</div>';else h+='<div class="vd r">No alcanza. Te faltarían '+money(-left)+' para cubrir los próximos 7 días.</div>';
+h+='<div class="card"><h2>La cuenta de 7 días</h2><div class="row"><span>Tu efectivo propio</span><b>'+money(c)+'</b></div><div class="row"><span>− Monto a gastar</span><b>'+money(a)+'</b></div><div class="row"><span>− Pagos de los próximos 7 días</span><b>'+money(U.pay7)+'</b></div><div class="row"><span>− Comida y pasaje (7 días)</span><b>'+money(f)+'</b></div>'+(U.in7>0?'<div class="row"><span>+ Entradas esperadas</span><b>'+money(U.in7)+'</b></div>':"")+'<div class="row"><span><b>Te quedaría</b></span><b class="'+(left<0?"neg":"pos")+'">'+money(left)+'</b></div>'+(U.list.length?'<div class="note">Pagos que cuenta: '+U.list.join(", ")+'. Si alguno ya lo pagaste, márcalo en Pagos.</div>':"")+'</div>';
+$("go").innerHTML=h}
+/* historial */
+function vHis(){var ks=Object.keys(S.days).filter(function(k){return hasData(S.days[k])}).sort().reverse().slice(0,60);
+var h=BK+'<h1>Historial</h1><p class="sub">Toca un día para verlo o corregirlo.</p><div class="card">';
+if(!ks.length)h+='<div class="sub" style="margin:0">Aún no hay días anotados.</div>';
+ks.forEach(function(k){var x=S.days[k],d=pd(k);h+='<button class="hr" onclick="goDay(\''+k+'\')"><span>'+lab(d)+'<small>Farmacia '+money(num(x.med))+', inversión '+money(num(x.inv))+', comida '+money(num(x.food))+', lotería '+money(num(x.lot))+'</small></span><b class="'+(x.closed?"pos":"")+'">'+(x.closed?"Cerrado ✓":"Abierto")+'</b></button>'});
+$("v").innerHTML=h+'</div>'}
+/* tips */
+function vTip(){var t=today(),m=monthStats(t,false),ex="";
+if(m.inv>m.med&&m.inv>0)ex='<div class="al a">Este mes llevas más inversión ('+money(m.inv)+') que ventas de farmacia ('+money(m.med)+'). Revisa qué productos se están quedando sin vender.</div>';else if(m.med>0)ex='<div class="al b">Este mes tu ganancia de farmacia va en '+money(m.med-m.inv)+'.</div>';
+var T=[["Anota todo cada noche","Dedica 5 minutos al cerrar el día. Lo que no se anota se olvida, y los números del mes dejan de cuadrar."],["Separa el dinero de lotería","Lo que cobras de lotería es para depositar. Guárdalo aparte, en un sobre o bolsillo distinto, y no lo uses para comida ni pagos."],["Ganancia es ventas menos inversión","Vender RD$1,000 no es ganar RD$1,000. Resta lo que gastaste en productos para saber lo que de verdad te queda."],["Mira los pagos de la semana","Cada lunes revisa la pestaña Pagos y aparta ya el dinero de lo que vence en los próximos 7 días."],["Aparta cuando entra el dinero","Cuando llegue la ganancia de lotería, separa de una vez lo de los pagos grandes del mes antes de gastar en otra cosa."],["Compra lo que se vende","Repón primero los productos que salen rápido. Un producto parado es dinero guardado que no puedes usar."],["Cuenta tu existencia de vez en cuando","Un conteo real cada mes, en la pestaña Inversión, corrige errores y te muestra si hay productos vencidos o perdidos."],["Pide los acuerdos por escrito","Si negocias un atraso con el operador, el banco o el dueño del local, pide que quede escrito y con fechas."],["Revisa la tarjeta","La fecha de corte no es la fecha de pago. Confirma las dos en tu aplicación del banco y agrégala en Pagos."],["Un hábito pequeño sirve más que uno perfecto","Si un día no anotaste, vuelve al siguiente y sigue. Puedes completar días anteriores con las flechas de Hoy."]];
+var h=BK+'<h1>Tips para llevar las cuentas</h1><p class="sub">Consejos básicos de orden.</p>'+ex+'<div class="card">';T.forEach(function(x){h+='<div class="tip"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>'});
+$("v").innerHTML=h+'</div><div class="note">Son consejos generales de organización, no asesoría financiera.</div>'}
+/* ajustes */
+function seg(k,opts){var h='<div class="seg">';opts.forEach(function(o){h+='<button class="'+(S[k]===o[0]?"on":"")+'" onclick="setOpt(\''+k+'\','+JSON.stringify(o[0]).replace(/"/g,"&quot;")+')">'+o[1]+'</button>'});return h+'</div>'}
+function setOpt(k,v){S[k]=v;save();draw()}
+function vAj(){var h=BK+'<h1>Ajustes y respaldo</h1><p class="sub">&nbsp;</p>'+
+'<div class="card"><h2>Tamaño de letra</h2>'+seg("fs",[[1,"Normal"],[1.15,"Grande"],[1.3,"Muy grande"]])+'<h2 style="margin-top:14px">Color</h2>'+seg("ac",[["verde","Verde"],["azul","Azul"],["morado","Morado"],["naranja","Naranja"]])+'<h2 style="margin-top:14px">Modo</h2>'+seg("mode",[["auto","Automático"],["light","Claro"],["dark","Oscuro"]])+'</div>'+
+'<div class="card"><h2>Cifras</h2><span class="lbl" style="margin-top:0">Gasto diario estimado de comida y pasaje (RD$)</span>'+inp("es","0",S.est)+'<span class="lbl">Ganancia mensual de lotería (RD$)</span>'+inp("ga","0",S.gainA)+'</div>'+
+'<div class="card"><h2>Respaldo de tus datos</h2><div class="sub" style="margin:0">Cópialo y pégalo en WhatsApp o en tus notas. Si cambias de teléfono o se borran los datos, pégalo aquí para restaurarlo.</div><button class="btn" id="bc">Copiar respaldo</button><textarea class="txt" id="bt" placeholder="Aquí aparece el respaldo. Para restaurar, pega aquí tu respaldo."></textarea><button class="btn" id="br">Restaurar desde el texto</button><div id="bm" class="note"></div></div>'+
+'<div class="card"><button class="btn o" id="rs" style="margin-top:0">Borrar todos mis datos</button></div>';
+$("v").innerHTML=h;
+$("es").addEventListener("change",function(){S.est=num($("es").value);save()});$("ga").addEventListener("change",function(){S.gainA=num($("ga").value);save()});
+$("bc").addEventListener("click",function(){var j=JSON.stringify(S);$("bt").value=j;$("bt").select();var ok=false;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(j).then(function(){$("bm").textContent="Copiado. Pégalo en WhatsApp o en tus notas."},function(){$("bm").textContent="Selecciona el texto de arriba y cópialo."});ok=true}}catch(e){}if(!ok)$("bm").textContent="Selecciona el texto de arriba y cópialo."});
+$("br").addEventListener("click",function(){var o=null;try{o=JSON.parse($("bt").value)}catch(e){}if(!o||typeof o!=="object"||!o.days){$("bm").textContent="Ese texto no es un respaldo válido.";return}S=o;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}load();draw()});
+var cf=false;$("rs").addEventListener("click",function(){if(!cf){cf=true;$("rs").textContent="Toca otra vez para borrar todo";return}try{localStorage.removeItem(KEY)}catch(e){}load();sub=null;draw()})}
+load();sel=today();selW=wedOf(sel);selE=today();selM=new Date(today().getFullYear(),today().getMonth(),1);
+var lastDay=iso(today());
+document.addEventListener("visibilitychange",function(){if(document.visibilityState!=="visible")return;var k=iso(today());if(k!==lastDay){lastDay=k;sel=today();selW=wedOf(sel);selE=today()}draw()});
+draw();
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+try{if("serviceWorker" in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}catch(e){}
+</script>
+</body>
+</html>
